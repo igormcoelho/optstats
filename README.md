@@ -156,11 +156,17 @@ All novel code written here is MIT License, EXCEPT for dependencies (each .hpp h
 
 Note that:
 
-- Eigen has its own free license
-- GSL has its own free license
-- stats library (statslib) has its own free license
-   * gcem is a dependency from stats (library), which is also free license
+- Eigen: Mozilla Public License 2.0 (MPL2) - https://eigen.tuxfamily.org
+- GNU GSL: GNU Public License 3.0 (GPL3) - https://www.gnu.org/software/gsl/
+- stats library (statslib): Apache Version 2 (Apache 2.0) - https://github.com/kthohr/stats/
+   * gcem is a dependency from stats (library) - Apache 2.0 - https://github.com/kthohr/gcem/
 
 Depending on the mix, it can be GPL-like or MIT-like (better explanations may come in the future...).
+
+On short:
+
+- `lsqlinear.hpp` : MIT + Eigen => License MPL2
+- `lsqnonlinear.hpp` : MIT + GNU GSL => License GPL3
+- `ttest.hpp` : MIT + (stats library + GCEM) => MIT/Apache 2.0
 
 Copyleft 2021
