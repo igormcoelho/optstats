@@ -152,6 +152,8 @@ There unit tests on `tests/` folder, feel free to use them as examples.
 
 Free Software - Feel free to use it and redistribute it
 
+All novel code written here is MIT License, EXCEPT for dependencies (each .hpp has one).
+
 Note that:
 
 - Eigen has its own free license
@@ -159,6 +161,6 @@ Note that:
 - stats library (statslib) has its own free license
    * gcem is a dependency from stats (library), which is also free license
 
-Depending on the mix, it can be GPL-like or MIT-like (better explanations may come in the future)
+Depending on the mix, it can be GPL-like or MIT-like (better explanations may come in the future...).
 
 Copyleft 2021
