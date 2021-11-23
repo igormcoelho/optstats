@@ -30,7 +30,7 @@ These currently include:
 ### least squares linear regression (for parabolic curve)
 
 ```{.cpp}
-  #include "optstats.hpp"
+  #include "lsqlinear.hpp"
   // ...
   std::vector<double> vx = {-1, 1, 2, 3};
   std::vector<double> vy = {1 / 2.0, -1, -1 / 2.0, 2};
@@ -62,7 +62,7 @@ Note that error is greater than a real nonlinear approach (such as with Levenber
 ### least squares nonlinear regression (using Levenberg-Marquardt on GSL)
 
 ```
-  #include "nonlineargsl.hpp"
+  #include "lsqnonlinear.hpp"
   // ...
 
   // y = a*e^{-bx}
@@ -113,6 +113,8 @@ Learn more about T vs Normal:
 Two sided independent t-test (from Wikipedia).
 
 ```
+  #include "ttest.hpp"
+  //...
   std::vector<double> a1 = {30.02, 29.99, 30.11, 29.97, 30.01, 29.99};
   std::vector<double> a2 = {29.89, 29.93, 29.72, 29.98, 30.02, 29.98};
 
