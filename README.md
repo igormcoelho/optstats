@@ -7,7 +7,7 @@ These currently include:
 - linear regressions (by means of Eigen project)
 - non-linear regressions (by means of GSL project)
 
-## Examples
+## Examples for Least Squares on C++
 
 ### least squares linear regression
 
@@ -47,7 +47,17 @@ These currently include:
   assert(-41 / 44.0 == vA[2]);
 ```
 
-### least squares nonlinear regression (using GSL)
+### least squares nonlinear regression (with log transform)
+
+See log transform strategies:
+
+- https://math.stackexchange.com/questions/1488747/least-square-approximation-for-exponential-functions
+- https://math.stackexchange.com/questions/2591061/exponential-least-squares-equation
+
+There's also a test on `tests/` that works on that using Eigen.
+Note that error is greater than a real nonlinear approach (such as with Levenberg-Marquardt).
+
+### least squares nonlinear regression (using Levenberg-Marquardt on GSL)
 
 ```
   #include "nonlineargsl.hpp"
@@ -82,19 +92,58 @@ These currently include:
 ```
 
 
-## How to use
+### How to use
 
-In order to use linear regressions of `optstats.hpp`, just `#include "optstats.hpp"`.
+In order to use linear regressions of `lsqlinear.hpp`, just `#include "lsqlinear.hpp"`.
 You will need to include Eigen support, just include `-Ipath/to/eigen`.
 
-For nonlinear regressions, one needs to `#include "nonlineargsl.hpp"`.
+For nonlinear regressions, one needs to `#include "lsqnonlinear.hpp"`.
 In this case, GNU GSL will be required, so as flag `-lgsl`. 
 On Ubuntu 20.04, just `apt install libgsl-dev`.
+
+## Examples for Student's T test on C++
+
+Learn more about T vs Normal:
+
+- https://www.statology.org/normal-distribution-vs-t-distribution/
+- https://en.wikipedia.org/wiki/Student%27s_t-test
+
+Two sided independent t-test (from Wikipedia).
+
+```
+  std::vector<double> a1 = {30.02, 29.99, 30.11, 29.97, 30.01, 29.99};
+  std::vector<double> a2 = {29.89, 29.93, 29.72, 29.98, 30.02, 29.98};
+
+  // Null Hypothesis: means of a1 and a2 are the same
+  double x1 = optstats::mean(a1);
+  double x2 = optstats::mean(a2);
+  assert(0.095 == (x1 - x2));
+
+  // test with unequal variances
+  auto [ttest, dof] = optstats::getIndependentTwoSampleTTest(a1, a2);
+
+  assert(1.959 == ttest);  // check t-value
+  assert(7.031 == dof);    // check degrees of freedom
+
+  // p-value for two-sided test (note the 'true')
+  double p = optstats::pIndependentTwoSampleTTest(a1, a2, true);
+  assert(0.09077 == p);
+```
+
+### How to use
+
+In order to use linear regressions of `ttest.hpp`, just `#include "ttest.hpp"`.
+You will need to include `GCEM` and `stat` library support, just include `-Ipath/to/statlib` (both are header-only).
 
 
 ## Tests
 
 There unit tests on `tests/` folder, feel free to use them as examples.
+
+## TODO
+
+- Levenberg-Marquardt algorithm used from GSL wrapper (provided by Eleobert) can also be found on "Eigen unsupported" (TODO: investigate this usage)
+   * more about L-M: https://en.wikipedia.org/wiki/Levenberg%E2%80%93Marquardt_algorithm
 
 
 ## License
@@ -103,9 +152,10 @@ Free Software - Feel free to use it and redistribute it
 
 Note that:
 
-Eigen has its own free license
-
-GSL has its own free license
+- Eigen has its own free license
+- GSL has its own free license
+- stats library (statslib) has its own free license
+   * gcem is a dependency from stats (library), which is also free license
 
 Depending on the mix, it can be GPL-like or MIT-like (better explanations may come in the future)
 

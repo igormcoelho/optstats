@@ -4,7 +4,7 @@
 #include <Eigen/Dense>
 #include <iostream>
 
-#include <optstats/optstats.hpp>
+#include <optstats/lsqlinear.hpp>
 
 using namespace std;
 using namespace Eigen;

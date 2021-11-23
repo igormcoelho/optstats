@@ -1,12 +1,17 @@
 #define CATCH_CONFIG_MAIN // This tells Catch to provide a main()
 #include <catch2/catch.hpp>
 
-#include <optstats/optstats.hpp>
+#include <optstats/lsqlinear.hpp>
+#include <optstats/ttest.hpp>
 
 // sudo apt install libgsl-dev
 #include <eleobert/curve_fit.hpp> // This is GPL wrapper over gsl: https://github.com/Eleobert/gsl-curve-fit
 //
-#include <optstats/nonlineargsl.hpp> // derived work from eleobert gsl wrapper
+#include <optstats/lsqnonlinear.hpp> // derived work from eleobert gsl wrapper
+
+//
+#define STATS_ENABLE_STDVEC_WRAPPERS
+#include <statslib/include/stats.hpp>
 
 using namespace std;
 using namespace optstats;
@@ -211,4 +216,70 @@ TEST_CASE("optstats nonlineargsl fit model_exp_mi1") {
   // std::cout << "R2=" << R2 << std::endl;
   // why fit is not near 0.99?
   REQUIRE(R2 >= 0.99);
+}
+
+// =====================
+
+void printv(std::vector<double> v) {
+  for (unsigned i = 0; i < v.size(); i++)
+    std::cout << v[i] << " ";
+  std::cout << std::endl;
+}
+
+TEST_CASE("optstats statslib dt t test") {
+  // https://statslib.readthedocs.io/en/latest/api/t.html
+  // density function for T-student
+  double x1 = stats::dt(0.37, 11, false);
+  // distribution function for T-student (CDF)
+  std::vector<double> vt = {0.0, 1.0, 2.0};
+  auto vp = stats::pt(vt, 4, false);
+  // vp: 0.5 0.81305 0.941942
+  //
+  // Degree of Freedom DoF = 4 (T-Table)
+  // t.50 = 0, t.75=0.741, t.80 = 0.941, t.85 = 1.190, t.90=1.533, t.95=2.132
+  // t=0 = 0.5
+  REQUIRE(0.5 == Approx(vp[0]).epsilon(1e-2));
+  // t=1 >= 0.8 and <= 0.85
+  REQUIRE(vp[1] >= 0.8);
+  REQUIRE(vp[1] <= 0.85);
+  // t=2 >= 1.5 and <= 2.1
+  REQUIRE(vp[2] >= 0.9);
+  REQUIRE(vp[2] <= 0.95);
+}
+
+TEST_CASE("optstats students t test") {
+  // https://en.wikipedia.org/wiki/Student%27s_t-test#Independent_(unpaired)_samples
+  // Section "Worked Samples"
+  //
+  std::vector<double> a1 = {30.02, 29.99, 30.11, 29.97, 30.01, 29.99};
+  std::vector<double> a2 = {29.89, 29.93, 29.72, 29.98, 30.02, 29.98};
+
+  // Null Hypothesis: means of a1 and a2 are the same
+  double x1 = optstats::mean(a1);
+  double x2 = optstats::mean(a2);
+  REQUIRE(0.095 == Approx(x1 - x2).epsilon(1e-4));
+
+  {
+    // test with unequal variances
+    auto [ttest, dof] = optstats::getIndependentTwoSampleTTest(a1, a2, false);
+
+    REQUIRE(1.959 == Approx(ttest).epsilon(1e-4));
+    REQUIRE(7.031 == Approx(dof).epsilon(1e-4));
+
+    double p = optstats::pIndependentTwoSampleTTest(a1, a2, true, false);
+    // std::cout << p << std::endl;
+    REQUIRE(0.09077 == Approx(p).epsilon(1e-4));
+  }
+
+  {
+    // test with equal variances
+    auto [ttest, dof] = optstats::getIndependentTwoSampleTTest(a1, a2, true);
+
+    REQUIRE(1.959 == Approx(ttest).epsilon(1e-4));
+    REQUIRE(10 == Approx(dof).epsilon(1e-4));
+
+    double p = optstats::pIndependentTwoSampleTTest(a1, a2, true, true);
+    // std::cout << p << std::endl;
+    REQUIRE(0.07857 == Approx(p).epsilon(1e-4));
+  }
 }

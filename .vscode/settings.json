@@ -99,7 +99,8 @@
         "stop_token": "cpp",
         "complex": "cpp",
         "hash_map": "cpp",
-        "semaphore": "cpp"
+        "semaphore": "cpp",
+        "mprealsupport": "cpp"
     },
     "restructuredtext.confPath": "${workspaceFolder}/docs/source",
     "editor.tokenColorCustomizations": {
