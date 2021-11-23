@@ -1,11 +1,13 @@
 ## optstats
 
-A C++ library for useful optimization, statistics and fitting tools in C++.
+A C++ library for useful tools on optimization, statistics and curve fitting.
 
 These currently include:
 
 - linear regressions (by means of Eigen project)
-- non-linear regressions (by means of GSL project)
+- non-linear regressions (by means of GNU GSL project)
+- T test
+   * Student's t test and Welch's test for unequal variances (by means of statslib/GCEM project)
 
 ## Examples for Least Squares on C++
 
