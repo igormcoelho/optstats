@@ -260,26 +260,47 @@ TEST_CASE("optstats students t test") {
   REQUIRE(0.095 == Approx(x1 - x2).epsilon(1e-4));
 
   {
-    // test with unequal variances
+    // test with unequal variances (two-sided)
     auto [ttest, dof] = optstats::getIndependentTwoSampleTTest(a1, a2, false);
 
     REQUIRE(1.959 == Approx(ttest).epsilon(1e-4));
     REQUIRE(7.031 == Approx(dof).epsilon(1e-4));
 
-    double p = optstats::pIndependentTwoSampleTTest(a1, a2, true, false);
+    double p =
+        optstats::pIndependentTwoSampleTTest(a1, a2, TestSides::Both, false);
     // std::cout << p << std::endl;
     REQUIRE(0.09077 == Approx(p).epsilon(1e-4));
   }
 
   {
-    // test with equal variances
+    // test with equal variances (two-sided)
     auto [ttest, dof] = optstats::getIndependentTwoSampleTTest(a1, a2, true);
 
     REQUIRE(1.959 == Approx(ttest).epsilon(1e-4));
     REQUIRE(10 == Approx(dof).epsilon(1e-4));
 
-    double p = optstats::pIndependentTwoSampleTTest(a1, a2, true, true);
+    double p =
+        optstats::pIndependentTwoSampleTTest(a1, a2, TestSides::Both, true);
     // std::cout << p << std::endl;
     REQUIRE(0.07857 == Approx(p).epsilon(1e-4));
+  }
+
+  {
+    // test with unequal variances (one-tailed) - greater
+    REQUIRE(x1 >= x2);
+
+    double p =
+        optstats::pIndependentTwoSampleTTest(a1, a2, TestSides::Greater, false);
+    REQUIRE(0.04539 == Approx(p).epsilon(1e-4));
+  }
+
+  {
+    // test with unequal variances (one-tailed) - less
+    REQUIRE(!(x1 <= x2));
+    // note that this will yield a high p-value, as x1 is NOT less than x2
+
+    double p =
+        optstats::pIndependentTwoSampleTTest(a1, a2, TestSides::Less, false);
+    REQUIRE(0.9546 == Approx(p).epsilon(1e-4));
   }
 }

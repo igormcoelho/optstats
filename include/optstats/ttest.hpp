@@ -81,16 +81,31 @@ auto getIndependentTwoSampleTTest(std::vector<double> v1,
   return std::make_tuple(t_test, dof);
 }
 
-double pIndependentTwoSampleTTest(std::vector<double> a1,
-                                  std::vector<double> a2, bool twoSided = true,
-                                  bool equalVariances = false) {
+enum class TestSides {
+  Undefined = 0,
+  Less = -1,   // alternative hypothesis
+  Greater = 1, // alternative hypothesis
+  Both = 2     // two sided
+};
 
+double pIndependentTwoSampleTTest(std::vector<double> a1,
+                                  std::vector<double> a2,
+                                  TestSides sides = TestSides::Both,
+                                  bool equalVariances = false) {
+  if (sides == TestSides::Undefined)
+    sides = TestSides::Both; // standard option (two-sided)
+  //
   auto [ttest, dof] =
       optstats::getIndependentTwoSampleTTest(a1, a2, equalVariances);
   double prob = stats::pt(ttest, dof, false);
   double p = 1 - prob;
-  if (twoSided)
+  if (sides == TestSides::Both)
     p = 2 * p;
+  if (sides == TestSides::Less)
+    p = 1 - p;
+  if (sides == TestSides::Greater) {
+    // nothing to do
+  }
   return p;
 }
 

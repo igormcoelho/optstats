@@ -129,8 +129,8 @@ Two sided independent t-test (from Wikipedia).
   assert(1.959 == ttest);  // check t-value
   assert(7.031 == dof);    // check degrees of freedom
 
-  // p-value for two-sided test (note the 'true')
-  double p = optstats::pIndependentTwoSampleTTest(a1, a2, true);
+  // p-value for two-sided test (note the 'TestSides::Two')
+  double p = optstats::pIndependentTwoSampleTTest(a1, a2, TestSides::Both);
   assert(0.09077 == p);
 ```
 
@@ -148,6 +148,8 @@ There unit tests on `tests/` folder, feel free to use them as examples.
 
 - Levenberg-Marquardt algorithm used from GSL wrapper (provided by Eleobert) can also be found on "Eigen unsupported" (TODO: investigate this usage)
    * more about L-M: https://en.wikipedia.org/wiki/Levenberg%E2%80%93Marquardt_algorithm
+- TODO consider other statistic techniques, such as: https://en.wikipedia.org/wiki/Akaike_information_criterion
+    * https://en.wikipedia.org/wiki/Foundations_of_statistics
 
 
 ## License
