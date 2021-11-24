@@ -150,7 +150,7 @@ There unit tests on `tests/` folder, feel free to use them as examples.
    * more about L-M: https://en.wikipedia.org/wiki/Levenberg%E2%80%93Marquardt_algorithm
 - TODO consider other statistic techniques, such as: https://en.wikipedia.org/wiki/Akaike_information_criterion
     * https://en.wikipedia.org/wiki/Foundations_of_statistics
-
+- TODO consider Armadillo for basic operations: http://arma.sourceforge.net/docs.html
 
 ## License
 
