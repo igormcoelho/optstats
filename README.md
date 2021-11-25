@@ -14,7 +14,7 @@ These currently include:
 ### least squares linear regression
 
 ```{.cpp}
-  #include "optstats.hpp"
+  #include "lsqlinear.hpp"
   // ...
   std::vector<double> vx = {0, 1, 2};
   std::vector<double> vy = {6, 0, 0};
