@@ -4,9 +4,9 @@ A C++ library for useful tools on optimization, statistics and curve fitting.
 
 These currently include:
 
-- linear regressions (by means of Eigen project)
-- non-linear regressions (by means of GNU GSL project)
-- T test
+- [lsqlinear.hpp](./include/optstats/lsqlinear.hpp): linear regressions (by means of Eigen project)
+- [lsqnonlinear.hpp](./include/optstats/lsqnonlinear.hpp): non-linear regressions (by means of GNU GSL project)
+- [ttest.hpp](./include/optstats/ttest.hpp): T test
    * Student's t test and Welch's test for unequal variances (by means of statslib/GCEM project)
 
 ## Examples for Least Squares on C++
